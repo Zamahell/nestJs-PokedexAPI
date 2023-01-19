@@ -8,6 +8,7 @@ import { Model, isValidObjectId } from 'mongoose';
 import { CreatePokemonDto } from './dto/create-pokemon.dto';
 import { UpdatePokemonDto } from './dto/update-pokemon.dto';
 import { Pokemon } from './entities/pokemon.entity';
+import { PaginationDto } from '../common/dto/pagination.dto';
 
 @Injectable()
 export class PokemonService {
@@ -27,8 +28,9 @@ export class PokemonService {
     }
   }
 
-  findAll() {
-    return;
+  findAll(paginationDto: PaginationDto) {
+    const { limit = 50, offset = 0 } = paginationDto;
+    return this.pokemonModel.find().limit(limit).skip(offset).select('-__v');
   }
 
   async findOne(term: string) {
